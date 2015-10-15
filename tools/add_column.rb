@@ -12,15 +12,13 @@ end
 
 CSV_PARAMS = { headers: true, col_sep: ";", encoding: "UTF-8" }
 
-csv = CSV.parse(STDIN, CSV_PARAMS)
-headers = csv.headers
-rows = csv.map { |row| row.fields }
-
 column_name = ARGV[0]
 column_before = nil
 same_as = nil
 column_content = nil
 column_content_prog = nil
+input_filename = nil
+output_filename = nil
 
 if ARGV.length > 1
   ARGV[1..-1].each do |arg|
@@ -33,9 +31,22 @@ if ARGV.length > 1
       column_content = arg[10..-1]
     when /^--contentprog=/
       column_content_prog = arg[14..-1]
+    when /^--in=/
+      input_filename = arg[5..-1]
+    when /^--out=/
+      output_filename = arg[6..-1]
     end
   end
 end
+
+if input_filename.nil? || input_filename.empty?
+  csv = CSV.parse(STDIN, CSV_PARAMS)
+else
+  csv = CSV.read(input_filename, CSV_PARAMS)
+end
+
+headers = csv.headers
+rows = csv.map { |row| row.fields }
 
 column_before ||= headers[-1]
 column_insertion_index = headers.find_index(column_before) + 1
@@ -58,6 +69,11 @@ headers.insert(column_insertion_index, column_name)
 
 # Output
 
-output_csv = CSV.new(STDOUT, CSV_PARAMS)
+if output_filename.nil? || output_filename.empty?
+  output_csv = CSV.new(STDOUT, CSV_PARAMS)
+else
+  output_csv = CSV.open(output_filename, 'w', CSV_PARAMS)
+end
+
 output_csv << headers
 rows.each { |row| output_csv << row }
