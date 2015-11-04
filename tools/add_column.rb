@@ -17,6 +17,7 @@ column_before = nil
 same_as = nil
 column_content = nil
 column_content_prog = nil
+content_load_path = nil
 input_filename = nil
 output_filename = nil
 
@@ -31,6 +32,10 @@ if ARGV.length > 1
       column_content = arg[10..-1]
     when /^--contentprog=/
       column_content_prog = arg[14..-1]
+    when /^--contentloadpath=/
+      content_load_path = arg[18..-1]
+      $:.unshift(content_load_path)
+      require 'content.rb'
     when /^--in=/
       input_filename = arg[5..-1]
     when /^--out=/
@@ -57,6 +62,8 @@ same_as_index = headers.find_index(same_as) if same_as
 rows.each do |row|
   if same_as
     content = row[same_as_index]
+  elsif content_load_path
+    content = process_row(row, column_insertion_index)
   elsif column_content_prog
     content = eval(column_content_prog)
   else
