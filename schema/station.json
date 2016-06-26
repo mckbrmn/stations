@@ -1,0 +1,97 @@
+{
+  "schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://stations.trainline.eu/schema/station",
+  "type": "object",
+  "properties": {
+    "id": {
+      "title": "Internal unique identifier",
+      "type": "string"
+    },
+    "name": {
+      "title": "Station's name",
+      "description": "Name of the station as it is locally known. Translations are to be put in the info object",
+      "type": "string"
+    },
+    "slug": {
+      "title": "A slug of the station's name",
+      "description": "Garanteed to be unique across all the suggestable stations",
+      "type": "string",
+      "pattern": "[a-z0-9-]+"
+    },
+    "uic": {
+      "title": "UIC code of the station",
+      "type": "string",
+      "minLength": 7,
+      "maxLength": 7
+    },
+    "latitude": {
+      "title": "Station's latitude",
+      "description": "Coordinates as decimal value. Paired with longitude",
+      "type": "number",
+      "minimum": -90,
+      "maximum": 90
+    },
+    "longitude": {
+      "title": "Station's longitude",
+      "description": "Coordinates as decimal value. Paired with latitude",
+      "type": "number",
+      "minimum": -180,
+      "maximum": 180
+    },
+    "parent_station_id": {
+      "title": "id of the meta station",
+      "description": "A station can belong to a meta station which can be a city or a station.",
+      "type": "string"
+    },
+    "is_city": {
+      "description": "Whether the station is a city. Not all cities are marked as such.",
+      "type": "boolean",
+      "default": false
+    },
+    "country": {
+      "title": "2-letter country code",
+      "description": "Code according to  ISO 3166-1 alpha-2 specification.",
+      "type": "string",
+      "pattern": "[A-Z]{2}"
+    },
+    "is_main_station": {
+      "description": "Whether the station is considered the main station for the area. Not all main stations are marked as such.",
+      "type": "boolean",
+      "default": false
+    },
+    "time_zone": {
+      "title": "The station's time zone",
+      "description": "In the Continent/City format",
+      "type": "string"
+    },
+    "is_suggestable": {
+      "description": "Whether the station can be input by a user",
+      "type": "boolean",
+      "default": false
+    },
+    "systems": {
+      "title": "Reservation system ids and status",
+      "$ref": "systems"
+    },
+    "same_as": {
+      "description": "Links a station to another as a duplicate. Useful for identical stations with different UIC codes.",
+      "type": "string"
+    },
+    "info": {
+      "type": "object",
+      "description": "Localized additional information/name disambiguation",
+      "patternProperties": {
+        "^[a-z]{2}$": {
+          "type": "string",
+          "description": "ISO 639-1 language code"
+        }
+      },
+      "additionalProperties": false
+    }
+  },
+  "required": ["id", "name", "slug", "country", "time_zone", "is_suggestable"],
+  "dependencies": {
+    "latitude": ["longitude"],
+    "longitude": ["latitude"]
+  }
+}

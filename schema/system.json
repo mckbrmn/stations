@@ -1,0 +1,21 @@
+{
+  "schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://stations.trainline.eu/schema/system",
+  "type": "object",
+  "properties": {
+    "id": {
+      "title": "Reservation system unique identifier",
+      "type": "string"
+    },
+    "is_enabled": {
+      "description": "Whether the station is enabled for use with the reservation system.",
+      "type": "boolean",
+      "default": false
+    },
+    "has_self_service_machine": {
+      "description": "Whether the station has a self-service machine for interacting with the reservation system.",
+      "type": "boolean",
+      "default": false
+    }
+  }
+}

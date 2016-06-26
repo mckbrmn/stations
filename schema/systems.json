@@ -1,0 +1,76 @@
+{
+  "schema": "http://json-schema.org/draft-04/schema#",
+  "id": "http://stations.trainline.eu/schema/systems",
+  "type": "object",
+  "properties": {
+    "atoc": {
+      "$ref": "system"
+    },
+    "busbud": {
+      "$ref": "system"
+    },
+    "db": {
+      "$ref": "system"
+    },
+    "hkx": {
+      "$ref": "system"
+    },
+    "idtgv": {
+      "$ref": "system"
+    },
+    "ntv": {
+      "allOf": [
+        {
+          "$ref": "system"
+        },
+        {
+          "properties": {
+            "rtiv_id": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    },
+    "ouigo": {
+      "$ref": "system"
+    },
+    "renfe": {
+      "$ref": "system"
+    },
+    "sncf": {
+      "allOf": [
+        {
+          "$ref": "system"
+        },
+        {
+          "properties": {
+            "tvs_id": {
+              "type": "string"
+            },
+            "uic8": {
+              "type": "string",
+              "minLength": 8,
+              "maxLength": 8
+            }
+          }
+        }
+      ]
+    },
+    "trenitalia": {
+      "allOf": [
+        {
+          "$ref": "system"
+        },
+        {
+          "properties": {
+            "rtvt_id": {
+              "type": "string"
+            }
+          }
+        }
+      ]
+    }
+  },
+  "additionalProperties": false
+}
